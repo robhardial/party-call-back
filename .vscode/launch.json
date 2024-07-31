@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-PartycallbackApplication<partycallback>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.partycall.partycallback.PartycallbackApplication",
+      "env": {
+                "DATABASE_URL": "jdbc:postgresql://localhost:5433/partycall",
+                "DATABASE_USERNAME": "postgres",
+                "DATABASE_PASSWORD": "Elmont$1234"
+            },
+      "projectName": "partycallback",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
