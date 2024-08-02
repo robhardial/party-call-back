@@ -66,6 +66,7 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User creator;

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.partycall.partycallback.models.Event;
 import com.partycall.partycallback.models.User;
 import com.partycall.partycallback.repositiories.UserRepository;
 
@@ -57,8 +58,28 @@ public class UserService {
         Optional<User> existingUserOptional = userRepository.findById(id);
 
         if (existingUserOptional.isPresent()) {
+
             User existingUser = existingUserOptional.get();
-            existingUser.setEmail(user.getEmail());
+
+            if (user.getEmail() != null) {
+                existingUser.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                existingUser.setPassword(user.getPassword());
+            }
+            if (user.getFirstName() != null) {
+                existingUser.setFirstName(user.getFirstName());
+            }
+            if (user.getLastName() != null) {
+                existingUser.setLastName(user.getLastName());
+            }
+            if (user.getEventsOrganized() != null) {
+                existingUser.setEventsOrganized(user.getEventsOrganized());
+            }
+            if (user.getTickets() != null) {
+                existingUser.setTickets(user.getTickets());
+            }
+
             return userRepository.save(existingUser);
         } else {
             return userRepository.save(user);
