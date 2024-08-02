@@ -59,6 +59,9 @@ public class Event {
     @Column(name = "end_time")
     private LocalTime endTime;
 
+    @Column(name = "quantity_Tickets")
+    private int quanTickets;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
