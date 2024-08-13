@@ -15,7 +15,7 @@ public class TicketService {
     @Autowired
     TicketRepository ticketRepository;
 
-    public List<Ticket> findAlltickets() {
+    public List<Ticket> findAllTickets() {
         return ticketRepository.findAll();
     }
 
