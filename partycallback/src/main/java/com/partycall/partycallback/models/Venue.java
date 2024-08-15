@@ -2,6 +2,8 @@ package com.partycall.partycallback.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +44,7 @@ public class Venue {
     private String zipCode;
 
     @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Event> events;
 
 }

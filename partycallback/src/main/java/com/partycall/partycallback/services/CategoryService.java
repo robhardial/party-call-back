@@ -15,7 +15,7 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public List<Category> findAllUsers() {
+    public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
 
