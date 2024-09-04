@@ -1,5 +1,7 @@
 package com.partycall.partycallback.auth;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,14 @@ public class AuthenticationService {
     private AuthenticationManager authManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+        if (existingUser.isPresent()) {
+            // Handle the case where the email is already registered
+            throw new IllegalArgumentException("Email is already registered");
+            // Alternatively, you could return a specific error response instead of throwing
+            // an exception
+        }
         User newUser = new User();
         newUser.setFirstName(request.getFirstName());
         newUser.setLastName(request.getLastName());

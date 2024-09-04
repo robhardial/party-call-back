@@ -18,30 +18,38 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private final AuthenticationProvider authenticationProvider;
+        @Autowired
+        private final AuthenticationProvider authenticationProvider;
 
-    @Autowired
-    private final JWTAuthenticationFilter jwtAuthFilter;
+        @Autowired
+        private final JWTAuthenticationFilter jwtAuthFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**") // Allow all requests to the authentication endpoints
-                        .permitAll()
-                        .anyRequest() // Any other request must be authenticated
-                        .authenticated())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless session management
-                )
-                .authenticationProvider(authenticationProvider) // Set custom authentication provider
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter before
-                                                                                             // username/password
-                                                                                             // authentication
+                http.csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
+                                .authorizeHttpRequests(authz -> authz
+                                                .requestMatchers("/auth/**") // Allow all requests to the authentication
+                                                                             // endpoints
+                                                .permitAll()
+                                                .requestMatchers("/events") // Allow all requests to the
+                                                                            // authentication endpoints
+                                                .permitAll()
+                                                .anyRequest() // Any other request must be authenticated
+                                                .authenticated())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless
+                                                                                                        // session
+                                                                                                        // management
+                                )
+                                .authenticationProvider(authenticationProvider) // Set custom authentication provider
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT
+                                                                                                             // filter
+                                                                                                             // before
+                                                                                                             // username/password
+                                                                                                             // authentication
 
-        return http.build();
-    }
+                return http.build();
+        }
 
 }
