@@ -3,6 +3,7 @@ package com.partycall.partycallback.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,8 +33,9 @@ public class SecurityConfig {
                                                 .requestMatchers("/auth/**") // Allow all requests to the authentication
                                                                              // endpoints
                                                 .permitAll()
-                                                .requestMatchers("/events") // Allow all requests to the
-                                                                            // authentication endpoints
+                                                .requestMatchers(HttpMethod.GET, "/events/**") // Allow all requests to
+                                                                                               // the
+                                                // authentication endpoints
                                                 .permitAll()
                                                 .anyRequest() // Any other request must be authenticated
                                                 .authenticated())
