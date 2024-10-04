@@ -59,6 +59,9 @@ public class Event {
     @Column(name = "end_time")
     private LocalTime endTime;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "quantity_Tickets")
     private int quanTickets;
 
