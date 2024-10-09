@@ -39,6 +39,10 @@ public class FileManagerService {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+
+		String fileurl = amazonClient.getUrl(savedFile.getGeneratedFileName());
+		savedFile.setGeneratedUrl(fileurl);
+		
 		return savedFile;
 	}
 

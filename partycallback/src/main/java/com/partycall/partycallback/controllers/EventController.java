@@ -78,7 +78,7 @@ public class EventController {
     public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO, @RequestHeader (name="Authorization") String token) {
 
         SavedFileDTO savedFile = fileManager.uploadFile(eventDTO.getFileDTO());
-        String imageUrl = savedFile.getGeneratedFileName();
+        String imageUrl = savedFile.getGeneratedUrl();
 
         String jwt = token.substring(7);
         String userEmail = jwtService.extractUsername(jwt);

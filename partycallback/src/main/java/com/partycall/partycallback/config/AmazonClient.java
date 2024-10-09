@@ -12,7 +12,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -95,6 +94,12 @@ public class AmazonClient {
         } catch (Exception e) {
             logger.error((ExceptionUtils.getStackTrace(e)));
         }
+    }
+
+    public String getUrl(String fileName){
+        fileName = "public-files/" + fileName;
+        String fileUrl = s3client.getUrl(bucketName, fileName).toString();
+        return fileUrl;
     }
     
 }

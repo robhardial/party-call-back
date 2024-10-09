@@ -2,33 +2,14 @@ package com.partycall.partycallback.dto;
 
 import java.util.Date;
 
+import lombok.Data;
+
+@Data
 public class SavedFileDTO {
     
     private String originalFileName;
 	private String generatedFileName;
+	private String generatedUrl;
 	private Date uploadedAt;
 
-	public String getOriginalFileName() {
-		return originalFileName;
-	}
-
-	public void setOriginalFileName(String originalFileName) {
-		this.originalFileName = originalFileName;
-	}
-
-	public String getGeneratedFileName() {
-		return generatedFileName;
-	}
-
-	public void setGeneratedFileName(String generatedFileName) {
-		this.generatedFileName = generatedFileName;
-	}
-
-	public Date getUploadedAt() {
-		return uploadedAt;
-	}
-
-	public void setUploadedAt(Date uploadedAt) {
-		this.uploadedAt = uploadedAt;
-	}
 }
