@@ -52,21 +52,23 @@ public class EventService {
     public Event saveEvent(Event event) {
 
         if (event.getVenue() != null) {
-        Optional<Venue> existingVenue = venueRepository.findByName(event.getVenue().getName());
-
-        if (existingVenue == null) {
-
-            Venue savedVenue = venueRepository.save(event.getVenue());
-            event.setVenue(savedVenue);
-
-        } else {
-            event.setVenue(existingVenue.get());
+            Optional<Venue> existingVenue = venueRepository.findByName(event.getVenue().getName());
+    
+            // Check if the venue is present
+            if (existingVenue.isPresent()) {
+                // If the venue exists, use it
+                event.setVenue(existingVenue.get());
+            } else {
+                // If the venue doesn't exist, save the new venue and set it to the event
+                Venue savedVenue = venueRepository.save(event.getVenue());
+                event.setVenue(savedVenue);
+            }
         }
-        }
-
-
+    
+        // Save the event
         return eventRepository.save(event);
     }
+    
 
     /**
      * Edits an existing Event in the system with the specified ID.
