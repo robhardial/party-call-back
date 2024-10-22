@@ -12,11 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.partycall.partycallback.dto.EventDTO;
+import com.partycall.partycallback.dto.SavedFileDTO;
 import com.partycall.partycallback.models.Event;
+import com.partycall.partycallback.models.User;
 import com.partycall.partycallback.services.EventService;
+import com.partycall.partycallback.services.FileManagerService;
+import com.partycall.partycallback.services.JwtService;
+import com.partycall.partycallback.services.UserService;
 
 @RestController
 @RequestMapping("/events")
@@ -25,6 +32,15 @@ public class EventController {
 
     @Autowired
     EventService eventService;
+
+    @Autowired
+    JwtService jwtService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    private FileManagerService fileManager;
 
     /**
      * Retrieves all events from the database.
@@ -59,7 +75,19 @@ public class EventController {
      *         201 (Created).
      */
     @PostMapping("/event")
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO, @RequestHeader (name="Authorization") String token) {
+
+        SavedFileDTO savedFile = fileManager.uploadFile(eventDTO.getFileDTO());
+        String imageUrl = savedFile.getGeneratedUrl();
+
+        String jwt = token.substring(7);
+        String userEmail = jwtService.extractUsername(jwt);
+        User requestUser = userService.findUserByEmail(userEmail);
+
+        Event event = eventDTO.getEvent();
+        event.setCreator(requestUser);
+        event.setImageUrl(imageUrl);
+        
         Event newEvent = eventService.saveEvent(event);
         return new ResponseEntity<Event>(newEvent, HttpStatus.CREATED);
     }

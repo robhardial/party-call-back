@@ -5,16 +5,22 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.partycall.partycallback.models.Event;
+import com.partycall.partycallback.models.Venue;
 import com.partycall.partycallback.models.Event;
 import com.partycall.partycallback.repositiories.EventRepository;
+import com.partycall.partycallback.repositiories.VenueRepository;
 
 @Service
 public class EventService {
 
     @Autowired
     EventRepository eventRepository;
+
+    @Autowired
+    VenueRepository venueRepository;
 
     public List<Event> findAllEvents() {
         return eventRepository.findAll();
@@ -44,8 +50,25 @@ public class EventService {
      * @return The saved Event.
      */
     public Event saveEvent(Event event) {
+
+        if (event.getVenue() != null) {
+            Optional<Venue> existingVenue = venueRepository.findByName(event.getVenue().getName());
+    
+            // Check if the venue is present
+            if (existingVenue.isPresent()) {
+                // If the venue exists, use it
+                event.setVenue(existingVenue.get());
+            } else {
+                // If the venue doesn't exist, save the new venue and set it to the event
+                Venue savedVenue = venueRepository.save(event.getVenue());
+                event.setVenue(savedVenue);
+            }
+        }
+    
+        // Save the event
         return eventRepository.save(event);
     }
+    
 
     /**
      * Edits an existing Event in the system with the specified ID.
