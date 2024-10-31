@@ -1,5 +1,6 @@
 package com.partycall.partycallback.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "venue_id")
     private Venue venue;
+
+    private BigDecimal price;
 
     private String description;
 

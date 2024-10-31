@@ -127,4 +127,12 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
+    public List<Event> getAllEventsByUserId(int id) {
+        return eventRepository.getAllEventsByUserId(id);
+    }
+
+    public Event getEventByTitle(String title) {
+        return eventRepository.findByTitle(title);
+    }
+
 }
