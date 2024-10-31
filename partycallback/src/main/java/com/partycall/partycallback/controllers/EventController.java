@@ -24,6 +24,8 @@ import com.partycall.partycallback.services.EventService;
 import com.partycall.partycallback.services.FileManagerService;
 import com.partycall.partycallback.services.JwtService;
 import com.partycall.partycallback.services.UserService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/events")
@@ -116,5 +118,21 @@ public class EventController {
         eventService.deleteEventById(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Get all events by userId
+     */
+    @GetMapping("user/{id}")
+    public ResponseEntity<List<Event>> getAllEventsByUserId(@PathVariable int id) {
+       List<Event> events = eventService.getAllEventsByUserId(id);
+       return new ResponseEntity<List<Event>>(events, HttpStatus.OK);
+    }
+
+    @GetMapping("title/{title}")
+    public ResponseEntity<Event> getEventByTitle(@PathVariable String title){
+        Event event = eventService.getEventByTitle(title);
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
+    }
+    
 
 }
