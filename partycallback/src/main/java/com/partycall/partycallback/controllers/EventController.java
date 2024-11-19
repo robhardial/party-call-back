@@ -79,6 +79,10 @@ public class EventController {
     @PostMapping("/event")
     public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO, @RequestHeader (name="Authorization") String token) {
 
+        if (eventDTO.getFileDTO() == null) {
+            throw new IllegalArgumentException("FileDTO cannot be null");
+        }
+
         SavedFileDTO savedFile = fileManager.uploadFile(eventDTO.getFileDTO());
         String imageUrl = savedFile.getGeneratedUrl();
 
