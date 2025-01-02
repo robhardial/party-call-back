@@ -135,4 +135,13 @@ public class EventService {
         return eventRepository.findByTitle(title);
     }
 
+    public Event getEventById(int id) {
+        return eventRepository.findByEventId(id);
+    }
+
+
+    public List<Event> getEventsByEmail(String email) {
+        return eventRepository.getEventsByEmail(email);
+    }
+
 }

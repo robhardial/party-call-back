@@ -21,4 +21,10 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     Event findByTitle(String title);
 
+    @Transactional
+    @Query("SELECT e FROM Event e WHERE e.creator.email = :email")
+    List<Event> getEventsByEmail(String email);
+
+    Event findByEventId(int id);
+
 }

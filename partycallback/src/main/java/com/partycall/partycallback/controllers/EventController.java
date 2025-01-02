@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -136,6 +137,12 @@ public class EventController {
     public ResponseEntity<Event> getEventByTitle(@PathVariable String title){
         Event event = eventService.getEventByTitle(title);
         return new ResponseEntity<Event>(event, HttpStatus.OK);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<List<Event>> getEventsByEmail(@PathVariable String email){
+        List<Event> events = eventService.getEventsByEmail(email);
+        return new ResponseEntity<List<Event>>(events, HttpStatus.OK);
     }
     
 
