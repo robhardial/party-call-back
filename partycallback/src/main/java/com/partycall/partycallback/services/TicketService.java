@@ -2,18 +2,32 @@ package com.partycall.partycallback.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.partycall.partycallback.models.User;
+import com.partycall.partycallback.dto.TicketDTO;
+import com.partycall.partycallback.dto.UserDTO;
+import com.partycall.partycallback.dto.UserTicketsDTO;
+import com.partycall.partycallback.dto.UserTicketsEventsDTO;
+import com.partycall.partycallback.models.Event;
 import com.partycall.partycallback.models.Ticket;
 import com.partycall.partycallback.repositiories.TicketRepository;
+import com.partycall.partycallback.services.EventService;
 
 @Service
 public class TicketService {
 
     @Autowired
     TicketRepository ticketRepository;
+
+    @Autowired
+    EventService eventService;
+
+    @Autowired
+    UserService userService;
 
     public List<Ticket> findAllTickets() {
         return ticketRepository.findAll();
@@ -42,8 +56,17 @@ public class TicketService {
      * @param ticket The ticket to be saved.
      * @return The saved ticket.
      */
-    public Ticket saveTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
+    public Ticket saveTicket(TicketDTO ticket) {
+
+        Event event = eventService.getEventById(ticket.getEventId());
+        User user = userService.findUserByEmail(ticket.getUserId());
+
+        Ticket newTicket = new Ticket();
+        newTicket.setPrice(ticket.getPrice());
+        newTicket.setAttendee(user);
+        newTicket.setEvent(event);
+
+        return ticketRepository.save(newTicket);
     }
 
     /**
@@ -85,6 +108,39 @@ public class TicketService {
      */
     public void deleteTicketById(int id) {
         ticketRepository.deleteById(id);
+    }
+
+    public List<UserTicketsDTO> getTicketsByUserEmail(String email) {
+
+        User user = userService.findUserByEmail(email);
+        List<Ticket> tickets = ticketRepository.getTicketsByUserId(user.getUserId());
+
+        return tickets.stream().map(ticket -> {
+            UserTicketsDTO dto = new UserTicketsDTO();
+
+            dto.setTicketId(ticket.getTicketId());
+            dto.setPrice(ticket.getPrice());
+
+            Event event = ticket.getEvent();
+
+            if(event != null){
+                User creator = event.getCreator();
+
+                UserDTO ticketEventCreator = new UserDTO(creator.getFirstName(), creator.getLastName());
+                UserTicketsEventsDTO eventsDTO = new UserTicketsEventsDTO();
+                eventsDTO.setEventId(event.getEventId());
+                eventsDTO.setTitle(event.getTitle());
+                eventsDTO.setStartTime(event.getStartTime());
+                eventsDTO.setStartDate(event.getStartDate());
+                eventsDTO.setVenue(event.getVenue());
+                eventsDTO.setPrice(event.getPrice());
+                eventsDTO.setImageUrl(event.getImageUrl());
+                eventsDTO.setCreator(ticketEventCreator);
+
+                dto.setEvent(eventsDTO);
+            }
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 }

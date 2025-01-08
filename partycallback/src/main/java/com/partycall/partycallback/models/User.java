@@ -56,6 +56,7 @@ public class User implements UserDetails {
     private List<Event> eventsOrganized;
 
     @OneToMany(mappedBy = "attendee", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Ticket> tickets;
 
     @Enumerated(EnumType.STRING)

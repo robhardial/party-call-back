@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.partycall.partycallback.dto.TicketDTO;
+import com.partycall.partycallback.dto.UserTicketsDTO;
 import com.partycall.partycallback.models.Ticket;
 import com.partycall.partycallback.services.TicketService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/tickets")
+@CrossOrigin
 public class TicketController {
 
     @Autowired
@@ -57,7 +63,7 @@ public class TicketController {
      *         201 (Created).
      */
     @PostMapping("/ticket")
-    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketDTO ticket) {
         Ticket newTicket = ticketService.saveTicket(ticket);
         return new ResponseEntity<Ticket>(newTicket, HttpStatus.CREATED);
     }
@@ -85,6 +91,12 @@ public class TicketController {
     public ResponseEntity<Ticket> deleteTicket(@PathVariable int id) {
         ticketService.deleteTicketById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<List<UserTicketsDTO>> getTicketsByUserId(@PathVariable String email){
+        List<UserTicketsDTO> tickets = ticketService.getTicketsByUserEmail(email);
+        return new ResponseEntity<List<UserTicketsDTO>>(tickets, HttpStatus.OK);
     }
 
 }
