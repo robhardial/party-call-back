@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -78,6 +80,7 @@ public class Event {
     private User creator;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Ticket> tickets;
 
 }
