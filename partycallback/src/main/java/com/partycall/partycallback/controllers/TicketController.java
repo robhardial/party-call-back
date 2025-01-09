@@ -94,7 +94,7 @@ public class TicketController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<List<UserTicketsDTO>> getTicketsByUserId(@PathVariable String email){
+    public ResponseEntity<List<UserTicketsDTO>> getTicketsByUserEmail(@PathVariable String email){
         List<UserTicketsDTO> tickets = ticketService.getTicketsByUserEmail(email);
         return new ResponseEntity<List<UserTicketsDTO>>(tickets, HttpStatus.OK);
     }
