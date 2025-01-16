@@ -88,9 +88,9 @@ public class TicketController {
      * @return a response entity indicating success with no content
      */
     @DeleteMapping("/ticket/{id}")
-    public ResponseEntity<Ticket> deleteTicket(@PathVariable int id) {
+    public ResponseEntity<String> deleteTicket(@PathVariable int id) {
         ticketService.deleteTicketById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Ticket deleted successfully");
     }
 
     @GetMapping("/{email}")
