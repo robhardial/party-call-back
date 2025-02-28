@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.partycall.partycallback.models.Event;
+import com.partycall.partycallback.models.User;
 import com.partycall.partycallback.models.Venue;
 import com.partycall.partycallback.models.Event;
 import com.partycall.partycallback.repositiories.EventRepository;
+import com.partycall.partycallback.repositiories.TicketRepository;
 import com.partycall.partycallback.repositiories.VenueRepository;
 
 @Service
@@ -18,6 +20,9 @@ public class EventService {
 
     @Autowired
     EventRepository eventRepository;
+
+    @Autowired
+    TicketRepository ticketRepository;
 
     @Autowired
     VenueRepository venueRepository;
@@ -142,6 +147,23 @@ public class EventService {
 
     public List<Event> getEventsByEmail(String email) {
         return eventRepository.getEventsByEmail(email);
+    }
+
+    /*
+     * * @param id    The id of the Event to delete
+     *   delete tickets by eventID
+     *   delete Event by eventID
+     */
+    public void deleteEventAndTickets(int id, User user) {
+
+        Event event = eventRepository.findByEventId(id);
+
+        if(event.getCreator().getUserId() != user.getUserId()){
+            throw new RuntimeException("Unauthorized: You can only delete your own events.");
+        }
+
+        ticketRepository.deleteTicketsByEventId(id);
+        eventRepository.deleteById(id);
     }
 
 }
