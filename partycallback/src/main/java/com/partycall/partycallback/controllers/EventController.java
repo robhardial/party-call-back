@@ -144,6 +144,20 @@ public class EventController {
         List<Event> events = eventService.getEventsByEmail(email);
         return new ResponseEntity<List<Event>>(events, HttpStatus.OK);
     }
+
+    /*
+     * Delete all tickets and Event associated with EventID
+     */
+
+    @DeleteMapping("/event/{eventId}/tickets")
+    public ResponseEntity<String> deleteEventAndTickets(@PathVariable int eventId, @RequestHeader("Authorization") String token) {
+
+        String jwt = token.substring(7);
+        String userEmail = jwtService.extractUsername(jwt);
+        User requestUser = userService.findUserByEmail(userEmail);
+        eventService.deleteEventAndTickets(eventId, requestUser);
+        return ResponseEntity.ok("Event deleted successfully");
+    }
     
 
 }
